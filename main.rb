@@ -30,14 +30,24 @@ module Enumerable
     end
     return true
   end
+
+  def my_any?(to_check)
+    my_each do |item|
+      return true if item == to_check
+    end
+    return false
+  end
 end
 
-['John', 23, 90, 77, 'Foo'].my_each { |item| puts item }
+my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo']
 
-['John', 23, 90, 77, 'Foo'].my_each_with_index { |item, index| puts "#{item}, #{index}" }
+my_array.my_each { |item| puts item }
+my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
 
 var = (0..10).my_select { |item| item.odd? }
 puts var
 
-
 p %w[this this this].my_all?
+
+puts my_array.my_any?("John")
+
