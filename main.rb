@@ -2,12 +2,16 @@ require 'pry'
 
 module Enumerable
   def my_each
+    return to_enum(:my_each) unless block_given?
+
     for item in self
       yield item
     end
   end
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) if not block_given?
+
     counter = 0
     my_each do |item|
       yield item, counter
@@ -17,6 +21,8 @@ module Enumerable
   end
 
   def my_select
+    return to_enum(:my_select) if not block_given?
+
     selected = []
     my_each {|item| selected.push(item) if yield(item)}
     selected
@@ -37,6 +43,15 @@ module Enumerable
     end
     return false
   end
+
+  def my_none?
+    return to_enum(:my_none?) if not block_given?
+
+    my_each do |item|
+      return false if yield(item)
+    end
+    return true
+  end
 end
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo']
@@ -51,3 +66,4 @@ p %w[this this this].my_all?
 
 puts my_array.my_any?("John")
 
+p my_array.my_none? {|item| item == 9}
