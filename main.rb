@@ -71,6 +71,20 @@ module Enumerable
     my_each {|item| map_list.push(yield(item))}
     map_list
   end
+
+  def my_inject(initial = nil)
+    total = self[0]
+    total = initial if initial
+
+    my_each_with_index do |item, index|
+      if not initial
+        total = yield(total, item)
+      else
+        total = yield(total, self[index + 1]) if self[index+1]
+      end
+    end
+    total
+  end
 end
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
@@ -90,3 +104,5 @@ p my_array.my_none? {|item| item == 9}
 puts my_array.my_count
 
 p my_array.my_map
+
+p [1, 2, 3, 4].my_inject {|sum, n| sum + n}
