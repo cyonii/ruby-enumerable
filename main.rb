@@ -52,9 +52,19 @@ module Enumerable
     end
     return true
   end
+
+  def my_count
+    counter = 0
+
+    my_each do
+      counter += 1
+    end
+
+    counter
+  end
 end
 
-my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo']
+my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
 
 my_array.my_each { |item| puts item }
 my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
@@ -67,3 +77,6 @@ p %w[this this this].my_all?
 puts my_array.my_any?("John")
 
 p my_array.my_none? {|item| item == 9}
+
+puts my_array.my_count
+
