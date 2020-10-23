@@ -73,15 +73,24 @@ module Enumerable
   end
 
   def my_inject(initial=nil)
-    total = initial ? initial : 0
-    counter = total ? 0 : 1
+    total = initial ? initial : self[0]
+    counter = initial ? 0 : 1
 
     my_each do
-      total = yield(total, self[counter])
+      total = yield(total, self[counter]) if self[counter]
       counter += 1
     end
     total
   end
+end
+
+
+def multiply_els(array)
+  product = 1
+  for i in array
+    product *= i
+  end
+  product
 end
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
@@ -102,4 +111,6 @@ puts my_array.my_count
 
 p my_array.my_map
 
-p [1, 2, 3, 4, 5].my_inject {|sum, n| sum + n}
+p [2,4,5].my_inject {|sum, n| sum * n}
+
+p multiply_els([2,4,5])
