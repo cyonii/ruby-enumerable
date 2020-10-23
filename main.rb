@@ -72,16 +72,13 @@ module Enumerable
     map_list
   end
 
-  def my_inject(initial = nil)
-    total = self[0]
-    total = initial if initial
+  def my_inject(initial=nil)
+    total = initial ? initial : 0
+    counter = total ? 0 : 1
 
-    my_each_with_index do |item, index|
-      if not initial
-        total = yield(total, item)
-      else
-        total = yield(total, self[index + 1]) if self[index+1]
-      end
+    my_each do
+      total = yield(total, self[counter])
+      counter += 1
     end
     total
   end
@@ -105,4 +102,4 @@ puts my_array.my_count
 
 p my_array.my_map
 
-p [1, 2, 3, 4].my_inject {|sum, n| sum + n}
+p [1, 2, 3, 4, 5].my_inject {|sum, n| sum + n}
