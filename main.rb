@@ -28,7 +28,9 @@ module Enumerable
     selected
   end
 
-  def my_all?
+  def my_all?(to_check=nil)
+    return true if !to_check and length
+    
     my_each_with_index do |item, index|
       next unless self[index + 1]
 
@@ -37,7 +39,9 @@ module Enumerable
     return true
   end
 
-  def my_any?(to_check)
+  def my_any?(to_check=nil)
+    return true if !to_check and length
+
     my_each do |item|
       return true if item == to_check
     end
