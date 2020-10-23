@@ -62,6 +62,15 @@ module Enumerable
 
     counter
   end
+
+  def my_map
+    return to_enum(:my_map) if not block_given?
+
+    map_list = []
+
+    my_each {|item| map_list.push(yield(item))}
+    map_list
+  end
 end
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
@@ -80,3 +89,4 @@ p my_array.my_none? {|item| item == 9}
 
 puts my_array.my_count
 
+p my_array.my_map
