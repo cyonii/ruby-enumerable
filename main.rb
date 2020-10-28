@@ -65,12 +65,12 @@ module Enumerable
     counter
   end
 
-  def my_map(my_proc=nil)
+  def my_map(&my_proc)
     return to_enum(:my_map) if not block_given?
 
     map_list = []
 
-    my_each {|item| map_list.push(my_proc ? my_proc.call(item) : yield(item))}
+    my_each {|item| map_list.push(my_proc.call(item))}
     map_list
   end
 
@@ -95,25 +95,58 @@ def multiply_els(array)
   product
 end
 
+
+
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
 
+puts "original list on which we worked:"
+puts "#{my_array}"
+
+puts " \n---------------------------------\n"
+puts "Running my_each method:"
 my_array.my_each { |item| puts item }
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_each_with_index method:"
 my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
 
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_select method:"
 var = (0..10).my_select { |item| item.odd? }
 puts var
 
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_all? method:"
 p %w[this this this].my_all?
 
+puts " \n---------------------------------\n"
+puts "\nRunning my_any? method:"
 puts my_array.my_any?("John")
 
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_none?_index method:"
 p my_array.my_none? {|item| item == 9}
 
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_count method:"
 puts my_array.my_count
+
+
+puts " \n---------------------------------\n"
+puts "\nRunning my_map method:"
 new_proc = Proc.new { |item| item.to_s + 2.to_s }
+p my_array.my_map(&new_proc)
 
-p my_array.my_map { |item| item.to_s + 2.to_s }
 
+puts " \n---------------------------------\n"
+puts "\nRunning my_inject method:"
 p [2,4,5].my_inject {|sum, n| sum * n}
 
+
+puts " \n---------------------------------\n"
+puts "\nRunning multiply_els method to test the output from my_inject method:"
 p multiply_els([2,4,5])
