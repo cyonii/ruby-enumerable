@@ -108,7 +108,7 @@ my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
 
 puts "\n---------------------------------\n"
 puts "\nRunning my_select method:"
-var = (0..10).my_select { |item| item.odd? }
+var = (0..10).my_select(&:odd?)
 puts var
 
 puts "\n---------------------------------\n"
@@ -121,7 +121,7 @@ puts my_array.my_any?('John')
 
 puts "\n---------------------------------\n"
 puts "\nRunning my_none?_index method:"
-p my_array.my_none? {|item| item == 9}
+p(my_array.my_none? { |item| item == 9 })
 
 puts "\n---------------------------------\n"
 puts "\nRunning my_count method:"
@@ -129,12 +129,12 @@ puts my_array.my_count
 
 puts "\n---------------------------------\n"
 puts "\nRunning my_map method:"
-new_proc = Proc.new { |item| item.to_s + 2.to_s }
+new_proc = proc { |item| item.to_s + 2.to_s }
 p my_array.my_map(&new_proc)
 
 puts "\n---------------------------------\n"
 puts "\nRunning my_inject method:"
-p [2, 4, 5].my_inject { |sum, n| sum * n }
+p [2, 4, 5].my_inject(nil) { |sum, n| sum * n }
 
 puts "\n---------------------------------\n"
 puts "\nRunning multiply_els method to test the output from my_inject method:"
