@@ -1,5 +1,3 @@
-require 'pry'
-
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -67,12 +65,12 @@ module Enumerable
     counter
   end
 
-  def my_map(&my_proc)
+  def my_map(my_proc=nil)
     return to_enum(:my_map) if not block_given?
 
     map_list = []
 
-    my_each {|item| map_list.push(my_proc.call(item))}
+    my_each {|item| map_list.push(my_proc ? my_proc.call(item) : yield(item))}
     map_list
   end
 
@@ -99,23 +97,23 @@ end
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
 
-# my_array.my_each { |item| puts item }
-# my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
+my_array.my_each { |item| puts item }
+my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
 
-# var = (0..10).my_select { |item| item.odd? }
-# puts var
+var = (0..10).my_select { |item| item.odd? }
+puts var
 
-# p %w[this this this].my_all?
+p %w[this this this].my_all?
 
-# puts my_array.my_any?("John")
+puts my_array.my_any?("John")
 
-# p my_array.my_none? {|item| item == 9}
+p my_array.my_none? {|item| item == 9}
 
-# puts my_array.my_count
+puts my_array.my_count
 new_proc = Proc.new { |item| item.to_s + 2.to_s }
 
-p my_array.my_map(&new_proc)
+p my_array.my_map { |item| item.to_s + 2.to_s }
 
-# p [2,4,5].my_inject {|sum, n| sum * n}
+p [2,4,5].my_inject {|sum, n| sum * n}
 
-# p multiply_els([2,4,5])
+p multiply_els([2,4,5])
