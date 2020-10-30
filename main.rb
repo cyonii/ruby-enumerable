@@ -111,12 +111,14 @@ module Enumerable
   end
 
   def my_inject(initial = nil)
-    total = initial || self[0]
-    counter = initial ? 0 : 1
+    total = initial
 
-    my_each do
-      total = yield(total, self[counter]) if self[counter]
-      counter += 1
+    my_each_with_index do |value, index|
+      if initial
+        total = yield(total, value)
+      else
+        total = initial = value
+      end
     end
     total
   end
@@ -124,9 +126,7 @@ end
 
 def multiply_els(array)
   product = 1
-  for i in array
-    product *= i
-  end
+  array.my_each { |i| product *= i }
   product
 end
 # rubocop:enable Metrics/CyclomaticComplexity
