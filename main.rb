@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/PerceivedComplexity
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -26,29 +28,23 @@ module Enumerable
   end
 
   def my_all?(to_check = nil)
-    return_value = true
+    my_each { |value| return false unless value }
 
     if block_given?
-      my_each { |i| return_value = false unless yield(i) }
-
-    elsif to_check
-      if to_check.is_a?(Class)
-        my_each { |i| return_value = false unless i.is_a?(to_check) }
-
-      elsif to_check.is_a?(Regexp)
-        my_each { |i| return_value = false unless i.to_s.match(to_check) }
-
-      else
-        my_each { |i| return_value = false unless i == to_check }
-      end
-
-    else
-      return true if empty?
-
-      my_each { |i| return_value = false unless i }
+      my_each { |value| return false unless yield(value) }
     end
 
-    return_value
+    if to_check.is_a?(Class)
+      my_each { |value| return false unless value.is_a?(to_check) }
+
+    elsif to_check.is_a?(Regexp)
+      my_each { |value| return false unless value.to_s.match(to_check) }
+
+    elsif !to_check.nil?
+      my_each { |value| return false unless value == to_check }
+    end
+
+    true
   end
 
   def my_any?(to_check = nil)
@@ -107,52 +103,31 @@ def multiply_els(array)
   end
   product
 end
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/PerceivedComplexity
 
 my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
 
 p(my_array.my_all? { |i| i.is_a?(Numeric) })
 
-# puts 'original list on which we worked:'
-# puts my_array.to_s
-
-# puts "\n---------------------------------\n"
-# puts 'Running my_each method:'
 # my_array.my_each { |item| puts item }
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_each_with_index method:"
 # my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_select method:"
 # var = (0..10).my_select(&:odd?)
 # puts var
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_all? method:"
 # p %w[this this this].my_all?
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_any? method:"
 # puts my_array.my_any?('John')
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_none?_index method:"
 # p(my_array.my_none? { |item| item == 9 })
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_count method:"
 # puts my_array.my_count
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_map method:"
 # new_proc = proc { |item| item.to_s + 2.to_s }
 # p my_array.my_map(&new_proc)
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning my_inject method:"
 # p [2, 4, 5].my_inject(nil) { |sum, n| sum * n }
 
-# puts "\n---------------------------------\n"
-# puts "\nRunning multiply_els method to test the output from my_inject method:"
 # p multiply_els([2, 4, 5])
