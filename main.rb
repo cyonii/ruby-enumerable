@@ -68,7 +68,7 @@ module Enumerable
     false
   end
 
-  def my_none?(to_check=nil)
+  def my_none?(to_check = nil)
     if !block_given? && to_check.nil?
       my_each { |value| return false if value }
     end
@@ -89,13 +89,15 @@ module Enumerable
     true
   end
 
-  def my_count
+  def my_count(to_check = nil)
     counter = 0
-
-    my_each do
-      counter += 1
+    if !to_check.nil?
+      my_each { |value| counter += 1 if value == to_check }
+    elsif block_given?
+      my_each { |value| counter += 1 if yield(value) }
+    else
+      my_each { counter += 1 }
     end
-
     counter
   end
 
