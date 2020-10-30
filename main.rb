@@ -68,11 +68,23 @@ module Enumerable
     false
   end
 
-  def my_none?
-    return to_enum(:my_none?) unless block_given?
+  def my_none?(to_check=nil)
+    if !block_given? && to_check.nil?
+      my_each { |value| return false if value }
+    end
 
-    my_each do |item|
-      return false if yield(item)
+    if block_given?
+      my_each { |value| return false if yield(value) }
+    end
+
+    if to_check.is_a?(Class)
+      my_each { |value| return false if value.is_a?(to_check) }
+
+    elsif to_check.is_a?(Regexp)
+      my_each { |value| return false if value.to_s.match(to_check) }
+
+    elsif !to_check.nil?
+      my_each { |value| return false if value == to_check }
     end
     true
   end
