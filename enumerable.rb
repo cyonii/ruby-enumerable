@@ -1,5 +1,6 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Style/For
 module Enumerable
   def my_each
     return to_enum(:my_each) unless block_given?
@@ -127,3 +128,4 @@ def multiply_els(array)
 end
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Style/For
