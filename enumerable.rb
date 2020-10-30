@@ -106,18 +106,17 @@ module Enumerable
   end
 
   def my_inject(*args)
-    operator = initial = nil
+    raise ArgumentError, "wrong number of arguments (given #{args.length}, expected 0..2)" if args.length > 2
 
-    raise ArgumentError.new(
-      "wrong number of arguments (given #{args.length}, expected 0..2)"
-    ) if args.length > 2
-
-    for i in args
-      if i.is_a?(Symbol)
-        operator = i
+    if args.length == 1
+      if args[0].is_a?(Symbol) or args[0].to_s.match(%r{[\+\-\*/]})
+        operator = args[0].to_sym
       else
-        initial = i
+        initial = args[0]
       end
+    elsif args.length == 2
+      initial = args[0]
+      operator = args[1].to_sym
     end
 
     total = initial
