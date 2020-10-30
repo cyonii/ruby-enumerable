@@ -102,12 +102,18 @@ module Enumerable
     counter
   end
 
-  def my_map(&my_proc)
-    return to_enum(:my_map) unless block_given?
-
+  def my_map(my_proc = nil)
     map_list = []
 
-    my_each { |item| map_list.push(my_proc.call(item)) }
+    if my_proc.is_a?(Proc)
+      my_each { |value| map_list << my_proc.call(value) }
+
+      return map_list
+    end
+
+    return to_enum(:my_map) if !block_given? and my_proc.nil?
+
+    my_each { |value| map_list << yield(value) } if block_given?
     map_list
   end
 
