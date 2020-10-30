@@ -31,9 +31,7 @@ module Enumerable
   def my_all?(to_check = nil)
     my_each { |value| return false unless value }
 
-    if block_given?
-      my_each { |value| return false unless yield(value) }
-    end
+    my_each { |value| return false unless yield(value) } if block_given?
 
     if to_check.is_a?(Class)
       my_each { |value| return false unless value.is_a?(to_check) }
@@ -44,18 +42,13 @@ module Enumerable
     elsif !to_check.nil?
       my_each { |value| return false unless value == to_check }
     end
-
     true
   end
 
   def my_any?(to_check = nil)
-    if !block_given? && to_check.nil?
-      my_each { |value| return true if value }
-    end
+    my_each { |value| return true if value } if !block_given? && to_check.nil?
 
-    if block_given?
-      my_each { |value| return true if yield(value) }
-    end
+    my_each { |value| return true if yield(value) } if block_given?
 
     if to_check.is_a?(Class)
       my_each { |value| return true if value.is_a?(to_check) }
@@ -70,13 +63,9 @@ module Enumerable
   end
 
   def my_none?(to_check = nil)
-    if !block_given? && to_check.nil?
-      my_each { |value| return false if value }
-    end
+    my_each { |value| return false if value } if !block_given? && to_check.nil?
 
-    if block_given?
-      my_each { |value| return false if yield(value) }
-    end
+    my_each { |value| return false if yield(value) } if block_given?
 
     if to_check.is_a?(Class)
       my_each { |value| return false if value.is_a?(to_check) }
@@ -107,7 +96,6 @@ module Enumerable
 
     if my_proc.is_a?(Proc)
       my_each { |value| map_list << my_proc.call(value) }
-
       return map_list
     end
 
@@ -117,11 +105,21 @@ module Enumerable
     map_list
   end
 
-  def my_inject(initial = nil)
-    total = initial
+  def my_inject(*args)
+    operator = initial = nil
+    operator = args[0] if args.length == 1
+    if args.length == 2
+      initial = args[0]
+      operator = args[1]
+    end
 
+    total = initial
     my_each do |value|
-      total = initial ? yield(total, value) : initial = value
+      total = if operator
+                initial ? total.send(operator, value) : initial = value
+              else
+                initial ? yield(total, value) : initial = value
+              end
     end
     total
   end
