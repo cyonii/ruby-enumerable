@@ -48,10 +48,22 @@ module Enumerable
   end
 
   def my_any?(to_check = nil)
-    return true if !to_check and length
+    if !block_given? && to_check.nil?
+      my_each { |value| return true if value }
+    end
 
-    my_each do |item|
-      return true if item == to_check
+    if block_given?
+      my_each { |value| return true if yield(value) }
+    end
+
+    if to_check.is_a?(Class)
+      my_each { |value| return true if value.is_a?(to_check) }
+
+    elsif to_check.is_a?(Regexp)
+      my_each { |value| return true if value.to_s.match(to_check) }
+
+    elsif !to_check.nil?
+      my_each { |value| return true if value == to_check }
     end
     false
   end
