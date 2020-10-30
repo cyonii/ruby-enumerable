@@ -113,12 +113,8 @@ module Enumerable
   def my_inject(initial = nil)
     total = initial
 
-    my_each_with_index do |value, index|
-      if initial
-        total = yield(total, value)
-      else
-        total = initial = value
-      end
+    my_each do |value|
+      total = initial ? yield(total, value) : initial = value
     end
     total
   end
@@ -131,29 +127,3 @@ def multiply_els(array)
 end
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
-
-my_array = ['John', 2, 16, 222, 23, 90, 77, 'Foo', 90, 12]
-
-p(my_array.my_all? { |i| i.is_a?(Numeric) })
-
-# my_array.my_each { |item| puts item }
-
-# my_array.my_each_with_index { |item, index| puts "#{item}, #{index}" }
-
-# var = (0..10).my_select(&:odd?)
-# puts var
-
-# p %w[this this this].my_all?
-
-# puts my_array.my_any?('John')
-
-# p(my_array.my_none? { |item| item == 9 })
-
-# puts my_array.my_count
-
-# new_proc = proc { |item| item.to_s + 2.to_s }
-# p my_array.my_map(&new_proc)
-
-# p [2, 4, 5].my_inject(nil) { |sum, n| sum * n }
-
-# p multiply_els([2, 4, 5])
