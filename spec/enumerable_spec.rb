@@ -23,4 +23,32 @@ describe Enumerable do
       expect(num_array.my_each {}).to eq(num_array)
     end
   end
+
+  describe '#my_each_with_index' do
+  it 'return an enumerator if block is not given' do
+    expect(num_array.my_each_with_index).to be_an(Enumerator)
+  end
+
+  it 'yield all elements with they are respective indexes' do
+    new_array = []
+    counter = 0
+    num_array.my_each_with_index do |item, index|
+      counter += item
+      new_array << index + 10
+    end
+   expect(new_array).to eql([10, 11, 12, 13, 14])
+   expect(counter).to eql(15)
+  end
+ end
+
+ describe '#my_select' do
+   it 'return an enumerator if block is not given' do
+   expect(num_array.my_select).to be_an(Enumerator)
+  end
+
+  it 'returns a new array that met the condition given' do
+   selected_arr = num_array.my_select {|item| item.even? }
+   expect(selected_arr).to eql([2, 4])
+  end 
+ end
 end
