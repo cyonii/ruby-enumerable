@@ -68,11 +68,11 @@ describe Enumerable do
 
     context 'when block is given' do
       it 'returns false if any block expression returns false' do
-        expect(random_arr.my_all? { |item| item.is_a(String) })
+        expect(random_arr.my_all? { |item| item.is_a?(String) }).to be(false)
       end
 
       it 'returns true if all block expression returns true' do
-        expect(num_array.my_all? { |item| item.is_a?(Numeric) })
+        expect(num_array.my_all? { |item| item.is_a?(Numeric) }).to be(true)
       end
     end
 
