@@ -292,5 +292,11 @@ describe Enumerable do
         expect(num_array.my_inject(10) { |sum, item| sum + item }).to eql(25)
       end
     end
+
+    context 'when only block is given' do
+      it 'returns the result of running block' do
+        expect(num_array.my_inject { |sum, item| sum + item }).to eql(15)
+      end
+    end
   end
 end
