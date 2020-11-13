@@ -4,7 +4,7 @@ describe Enumerable do
   let(:num_array) { [1, 2, 3, 4, 5] }
   let(:uniform_arr) { [10, 10, 10, 10, 10] }
   let(:random_arr) { [2, true, 'ruby', nil, 0, false] }
-  let(:falsy_arr) {[nil, false]}
+  let(:falsy_arr) { [nil, false] }
 
   describe '#my_each' do
     it 'returns an Enumerator when block is NOT given' do
@@ -122,11 +122,11 @@ describe Enumerable do
 
     context 'when block is given' do
       it 'returns true if any elements in the block expression return true' do
-        expect(num_array.my_any?{|item| item - 1 == 0}).to be(true)
+        expect(num_array.my_any? { |item| item - 1 == 0 }).to be(true)
       end
 
       it 'returns false if no elements in the block expression is true' do
-        expect(num_array.my_any?{|item| item + 1 == 10}).to be(false)
+        expect(num_array.my_any? { |item| item + 1 == 10 }).to be(false)
       end
     end
 
@@ -158,6 +158,60 @@ describe Enumerable do
 
         it 'return false if no element is equal to the expression' do
           expect(uniform_arr.my_any?(2 * 2)).to be(false)
+        end
+      end
+    end
+  end
+
+  describe '#my_none?' do
+    context 'when neither argument nor block is given' do
+      it 'returns false if an element is truthy' do
+        expect([*falsy_arr, 1].my_none?).to be(false)
+      end
+
+      it 'returns true if no element is truthy' do
+        expect(falsy_arr.my_none?).to be(true)
+      end
+    end
+
+    context 'when block is given' do
+      it 'returns false if block ever returns true' do
+        expect(num_array.my_none? { |item| item + 2 == 3 }).to be(false)
+      end
+
+      it 'returns true if all block returns are false' do
+        expect(num_array.my_none? { |item| item / 2 == 10 }).to be(true)
+      end
+    end
+
+    context 'when argument is passed' do
+      context 'when passed argument is a Class' do
+        it 'returns false if any element is an instance of given Class' do
+          expect(random_arr.my_none?(Integer)).to be(false)
+        end
+
+        it 'returns true if no element is instance of given Class' do
+          expect(num_array.my_none?(Float)).to be(true)
+        end
+      end
+
+      context 'when passed argument is a Regexp' do
+        it 'returns false if any element matches given pattern' do
+          expect(random_arr.my_none?(/\wy$/)).to be(false)
+        end
+
+        it 'returns true if no element matches given pattern' do
+          expect(random_arr.my_none?(/\wing$/)).to be(true)
+        end
+      end
+
+      context 'when argument is an expression' do
+        it 'returns false if any element is equal to expression' do
+          expect(num_array.my_none?(2 + 2)).to be(false)
+        end
+
+        it 'returns true if no element is equal to expression' do
+          expect(num_array.my_none?(4.5)).to be(true)
         end
       end
     end
