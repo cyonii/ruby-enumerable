@@ -226,13 +226,37 @@ describe Enumerable do
 
     context 'when a block is given' do
       it 'return the number of elements that yielding a true value' do
-        expect(num_array.my_count{|item| (item + 1).odd?}).to eql(2)
+        expect(num_array.my_count { |item| (item + 1).odd? }).to eql(2)
       end
     end
 
     context 'when an argument is given' do
       it 'return the number of element that are equal to argument given' do
         expect(num_array.my_count(2)).to eql(1)
+      end
+    end
+  end
+
+  describe '#my_map' do
+    context 'when no argument or block is given' do
+      it 'returns an Enumerator object' do
+        expect(random_arr.my_map).to be_a(Enumerator)
+      end
+    end
+
+    context 'when block is given' do
+      it 'returns a new array with the results of running block' do
+        selected = num_array.my_map { |item| item + 1 }
+        expect(selected).to eql([2, 3, 4, 5, 6])
+      end
+    end
+
+    context 'when argument is given' do
+      context 'when argument is a Proc' do
+        it 'returns a new array with the value of running proc' do
+          my_proc = proc { |item| item * 2 }
+          expect(num_array.my_map(my_proc)).to eql([2, 4, 6, 8, 10])
+        end
       end
     end
   end
