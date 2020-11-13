@@ -1,4 +1,4 @@
-require_relative '../enumerable.rb'
+require_relative '../enumerable'
 
 describe Enumerable do
   let(:num_array) { [1, 2, 3, 4, 5] }
@@ -16,10 +16,10 @@ describe Enumerable do
       temp_arr = []
       num_array.my_each do |item|
         total += item
-        temp_arr << item * item
+        temp_arr << item * 2
       end
       expect(total).to eql(15)
-      expect(temp_arr).to eql([1, 4, 9, 16, 25])
+      expect(temp_arr).to eql([1, 4, 6, 8, 10])
     end
 
     it 'returns the caller' do
@@ -298,5 +298,12 @@ describe Enumerable do
         expect(num_array.my_inject { |sum, item| sum + item }).to eql(15)
       end
     end
+  end
+end
+
+describe '#multiply_els' do
+  let(:test_arr) { [1, 2, 4] }
+  it 'returns the product of all element in the array ' do
+    expect(multiply_els(test_arr)).to eql(8)
   end
 end
