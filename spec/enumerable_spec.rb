@@ -260,4 +260,31 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_inject' do
+    context 'when more than 2 arguments are given' do
+      it 'raises ArgumentError' do
+        expect { num_array.my_inject(1, 2, 3) }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'when argument is given and block is not given' do
+      context 'when only 1 argument is given' do
+        it 'uses symbol as mathematical symbol effectively' do
+          expect(num_array.my_inject(:+)).to eql(15)
+        end
+
+        it 'uses character as mathematical operator effectively' do
+          expect(num_array.my_inject('*')).to eql(120)
+        end
+      end
+
+      context 'when 2 arguments are given' do
+        it 'uses first arg as base and second arg as mathematical operator' do
+          expect(num_array.my_inject(10, :+)).to eql(25)
+          expect(num_array.my_inject(1, '*')).to eql(120)
+        end
+      end
+    end
+  end
 end
