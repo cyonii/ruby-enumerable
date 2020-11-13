@@ -286,5 +286,11 @@ describe Enumerable do
         end
       end
     end
+
+    context 'when both argument and block is passed' do
+      it 'returns the result of running block using argument as base' do
+        expect(num_array.my_inject(10) { |sum, item| sum + item }).to eql(25)
+      end
+    end
   end
 end
