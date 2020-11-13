@@ -19,7 +19,7 @@ describe Enumerable do
         temp_arr << item * 2
       end
       expect(total).to eql(15)
-      expect(temp_arr).to eql([1, 4, 6, 8, 10])
+      expect(temp_arr).to eql([2, 4, 6, 8, 10])
     end
 
     it 'returns the caller' do
