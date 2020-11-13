@@ -216,4 +216,24 @@ describe Enumerable do
       end
     end
   end
+
+  describe '#my_count?' do
+    context 'when block or argument is not given' do
+      it 'return a number of elements ' do
+        expect(num_array.my_count).to eql(5)
+      end
+    end
+
+    context 'when a block is given' do
+      it 'return the number of elements that yielding a true value' do
+        expect(num_array.my_count{|item| (item + 1).odd?}).to eql(2)
+      end
+    end
+
+    context 'when an argument is given' do
+      it 'return the number of element that are equal to argument given' do
+        expect(num_array.my_count(2)).to eql(1)
+      end
+    end
+  end
 end
