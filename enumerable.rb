@@ -129,7 +129,7 @@ end
 
 def multiply_els(array)
   product = 1
-  array.my_each{ |i| product *= i }
+  array.my_each { |i| product *= i }
   product
 end
 
