@@ -4,6 +4,7 @@ describe Enumerable do
   let(:num_array) { [1, 2, 3, 4, 5] }
   let(:uniform_arr) { [10, 10, 10, 10, 10] }
   let(:random_arr) { [2, true, 'ruby', nil, 0, false] }
+  let(:falsy_arr) {[nil, false]}
 
   describe '#my_each' do
     it 'returns an Enumerator when block is NOT given' do
@@ -103,6 +104,60 @@ describe Enumerable do
 
         it 'returns true if all elements are equal to expression' do
           expect(uniform_arr.my_all?(5 * 2)).to be(true)
+        end
+      end
+    end
+  end
+
+  describe '#my_any?' do
+    context 'when no block or expressions are given' do
+      it 'returns false if no elements is truthy' do
+        expect(falsy_arr.my_any?).to be(false)
+      end
+
+      it 'returns true if any elements is truthy' do
+        expect(random_arr.my_any?).to be(true)
+      end
+    end
+
+    context 'when block is given' do
+      it 'returns true if any elements in the block expression return true' do
+        expect(num_array.my_any?{|item| item - 1 == 0}).to be(true)
+      end
+
+      it 'returns false if no elements in the block expression is true' do
+        expect(num_array.my_any?{|item| item + 1 == 10}).to be(false)
+      end
+    end
+
+    context 'when arguments is passed' do
+      context 'when a class is passed as an argument' do
+        it 'return true if any element is an instance of a given class' do
+          expect(random_arr.my_any?(String)).to be(true)
+        end
+
+        it 'return false is no element is an instance of a given class' do
+          expect(num_array.my_any?(String)).to be(false)
+        end
+      end
+
+      context 'when argument given is a regexp' do
+        it 'return true if any element match the given pattern' do
+          expect(random_arr.my_any?(/\wy$/)).to be(true)
+        end
+
+        it 'return false if no element match the given pattern' do
+          expect(random_arr.my_any?(/\d{2}/)).to be(false)
+        end
+      end
+
+      context 'when given argument is an expression' do
+        it 'return true if any element is equal to expression' do
+          expect(num_array.my_any?(2 * 2)).to be(true)
+        end
+
+        it 'return false if no element is equal to the expression' do
+          expect(uniform_arr.my_any?(2 * 2)).to be(false)
         end
       end
     end
